@@ -1,0 +1,40 @@
+version: '3.8'
+services:
+  db:
+    image: postgres:14.1-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=mysecretpassword
+    ports:
+      - '5432:5432'
+    volumes: 
+      - db:/var/lib/postgresql/data
+  backend:
+    container_name: backend
+    build:
+      context: ./server
+    image: backend
+    depends_on:
+      - db
+    ports:
+      - 8081:8081
+    links:
+      - db
+  client:
+    container_name: client
+    build:
+      context: ./client
+    image: client
+    environment:
+      - BACKEND_HOST=localhost
+    depends_on:
+      - db
+      - backend
+    ports:
+      - 80:80
+    links:
+      - backend
+volumes:
+  db:
+    driver: local

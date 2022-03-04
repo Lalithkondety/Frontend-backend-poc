@@ -1,0 +1,11 @@
+.dockerignore
+**/*.log
+Dockerfile
+.git
+.gitignore
+.idea
+.mvn
+.target
+.idea/*
+.mvn/*
+.target/*
